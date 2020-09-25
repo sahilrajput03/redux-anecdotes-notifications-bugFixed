@@ -7,10 +7,6 @@ import {clearNotification} from "../reducers/notificationReducer";
 const Notification = () => {
   const dispatch = useDispatch();
 
-  // setTimeout(() => {
-  //   throw new Error("Haha, infinite render hell DECODED!!");
-  // }, 5000);
-
   const {notification} = useSelector((s) => s);
 
   let timeIdRef = React.useRef(notification);
