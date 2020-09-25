@@ -20,7 +20,7 @@ const Notification = () => {
       timeIdRef.current = setTimeout(() => {
         dispatch(clearNotification());
         console.log("::useeffect::DISPATCH successful for clearing notification.");
-        timeIdRef.current = null; /*BONUS: This will prevent un-necessary execution clearUp function. */
+        timeIdRef.current = null; /*BONUS: This will prevent un-necessary execution of clearUp function. */
       }, 3 * 1000);
       console.log("::useeffect::SCHEDULED async call with id =>", timeIdRef.current);
       return () => {
