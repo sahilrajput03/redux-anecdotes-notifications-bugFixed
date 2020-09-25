@@ -12,12 +12,15 @@ const Notification = () => {
   let [timeId, setTimeId] = React.useState(null);
 
   React.useEffect(() => {
-    clearTimeout(timeId); /* Toggle😁😁 commenting this line to see, buggy notifications. */
-    console.log("::useeffect::Cleared async call with id =>", timeId);
+    if (timeId) {
+      clearTimeout(timeId); /* Toggle😁😁 commenting this line to see, buggy notifications. */
+      console.log("::useeffect::Cleared async call for resetting `notification message` with id =>", timeId);
+    }
     let timeIdTemp = setTimeout(() => {
       dispatch(clearNotification());
     }, 3 * 1000);
     setTimeId(timeIdTemp);
+    console.log("::useeffect::Async call for resetting `notification message` scheduled with id =>", timeId);
   }, [notification]);
 
   if (notification === null) {
