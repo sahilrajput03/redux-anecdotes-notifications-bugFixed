@@ -26,8 +26,6 @@ const Notification = () => {
 
 export default Notification;
 
-console.log("coooooooooool");
-
 const useClearNotificationHook = (notificationMessage, dispatch, timeInSeconds) => {
   console.log = () => {}; /* COMMENT this line to activate all the console.logs inside this hook. */
   let timeIdRef = React.useRef();
