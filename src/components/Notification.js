@@ -9,25 +9,9 @@ const Notification = () => {
 
   const {notification} = useSelector((s) => s);
 
-  let timeIdRef = React.useRef(notification);
-
-  React.useEffect(() => {
-    if (notification) {
-      timeIdRef.current = setTimeout(() => {
-        dispatch(clearNotification());
-        console.log("::useeffect::DISPATCH successful for clearing notification.");
-        timeIdRef.current = null; /*BONUS: This will prevent un-necessary execution of clearUp function. */
-      }, 3 * 1000);
-      console.log("::useeffect::SCHEDULED async call with id =>", timeIdRef.current);
-      return () => {
-        if (timeIdRef.current) {
-          clearTimeout(timeIdRef.current);
-          console.log("::cleanUpFunction:: CLEARED async call for id => ", timeIdRef.current);
-        }
-      };
-    }
-  }, [notification, dispatch]);
-
+  useClearNotificationHook(notification, dispatch, 3);
+  /* Custom Hook for manging dispatch call for clearing message. */
+  /* Signature => notificationMessage, dispatch, timeInSeconds */
   if (notification === null) {
     return null;
   }
@@ -38,6 +22,29 @@ const Notification = () => {
     borderWidth: 1
   };
   return <div style={style}>{notification.message}</div>;
-};
+}; /* End of Notification Component here. */
 
 export default Notification;
+
+console.log("coooooooooool");
+
+const useClearNotificationHook = (notificationMessage, dispatch, timeInSeconds) => {
+  console.log = () => {}; /* COMMENT this line to activate all the console.logs inside this hook. */
+  let timeIdRef = React.useRef();
+  React.useEffect(() => {
+    if (notificationMessage) {
+      timeIdRef.current = setTimeout(() => {
+        dispatch(clearNotification());
+        /* LOG1 */ console.log("::useeffect::DISPATCH successful for clearing notification.");
+        timeIdRef.current = null; /*BONUS: This will prevent un-necessary execution of clearUp function. */
+      }, timeInSeconds * 1000);
+      /* LOG2 */ console.log("::useeffect::SCHEDULED async dispatch call for id => ", timeIdRef.current);
+      return () => {
+        if (timeIdRef.current) {
+          clearTimeout(timeIdRef.current);
+          /* LOG3 */ console.log("::cleanUpFunction:: CLEARED async dispatch call for id => ", timeIdRef.current);
+        }
+      };
+    }
+  }, [notificationMessage, dispatch, timeInSeconds]);
+};
