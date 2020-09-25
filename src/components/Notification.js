@@ -1,27 +1,36 @@
-import React from 'react';
-import {useSelector} from 'react-redux';
-import {useDispatch} from 'react-redux';
+import React from "react";
+import {useSelector} from "react-redux";
+import {useDispatch} from "react-redux";
 
-import {clearNotification} from '../reducers/notificationReducer';
+import {clearNotification} from "../reducers/notificationReducer";
 
 const Notification = () => {
   const dispatch = useDispatch();
 
-  const { notification } = useSelector((s) => s);
+  // setTimeout(() => {
+  //   throw new Error("Haha, infinite render hell DECODED!!");
+  // }, 5000);
 
-  let [timeId, setTimeId] = React.useState(null);
+  const {notification} = useSelector((s) => s);
+
+  let timeIdRef = React.useRef(notification);
 
   React.useEffect(() => {
-    if (timeId) {
-      clearTimeout(timeId); /* Toggle😁😁 commenting this line to see, buggy notifications. */
-      console.log("::useeffect::Cleared async call for resetting `notification message` with id =>", timeId);
+    if (notification) {
+      timeIdRef.current = setTimeout(() => {
+        dispatch(clearNotification());
+        console.log("::useeffect::DISPATCH successful for clearing notification.");
+        timeIdRef.current = null; /*BONUS: This will prevent un-necessary execution clearUp function. */
+      }, 3 * 1000);
+      console.log("::useeffect::SCHEDULED async call with id =>", timeIdRef.current);
+      return () => {
+        if (timeIdRef.current) {
+          clearTimeout(timeIdRef.current);
+          console.log("::cleanUpFunction:: CLEARED async call for id => ", timeIdRef.current);
+        }
+      };
     }
-    let timeIdTemp = setTimeout(() => {
-      dispatch(clearNotification());
-    }, 3 * 1000);
-    setTimeId(timeIdTemp);
-    console.log("::useeffect::Async call for resetting `notification message` scheduled with id =>", timeId);
-  }, [notification]);
+  }, [notification, dispatch]);
 
   if (notification === null) {
     return null;
@@ -30,7 +39,7 @@ const Notification = () => {
   const style = {
     border: "solid",
     padding: 10,
-    borderWidth: 1,
+    borderWidth: 1
   };
   return <div style={style}>{notification.message}</div>;
 };

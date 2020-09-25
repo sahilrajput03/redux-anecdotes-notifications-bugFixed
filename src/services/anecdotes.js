@@ -1,25 +1,27 @@
-import axios from 'axios'
+import axios from "axios";
 
-const baseUrl = 'http://localhost:3001/anecdotes'
+// const baseUrl = 'http://localhost:3001/anecdotes'/* for locally runnig json-server */
+
+const baseUrl = "https://dv0pm.sse.codesandbox.io/anecdotes";
 
 const getAll = async () => {
-  const response = await axios.get(baseUrl)
-  return response.data
-}
+  const response = await axios.get(baseUrl);
+  return response.data;
+};
 
 const createNew = async (content) => {
-  const object = {content, votes: 0}
-  const response = await axios.post(baseUrl, object)
-  return response.data
-}
+  const object = {content, votes: 0};
+  const response = await axios.post(baseUrl, object);
+  return response.data;
+};
 
 const update = async (id, newObject) => {
-  const request = await axios.put(`${baseUrl}/${id}`, newObject)
-  return request.data
-}
+  const request = await axios.put(`${baseUrl}/${id}`, newObject);
+  return request.data;
+};
 
 export default {
-    getAll,
-    createNew,
-    update,
-}
+  getAll,
+  createNew,
+  update
+};
